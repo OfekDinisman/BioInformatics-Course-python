@@ -30,8 +30,13 @@ def viterbi(obs,transition,emission):
             # keeps current trace
             trace = trace_curr
         max_p, state = max((v[n-1,l], l) for l in range(0,k))
+        print(*obs, sep='-')
+        print('| ' * len(obs))
+        print(*trace[state+1], sep=' ')
         transition, emission = countTransitionEmission(obs, trace[state+1])
         transition, emission = normalize(transition, emission)
+
+
 
         if abs(max_p_curr - max_p) < epsilon:
             break
@@ -58,6 +63,8 @@ def countTransitionEmission(x,trace):
         transition[trace[i]-1,trace[i+1]-1]+=1
         emission[trace[i]][x[i]]+=1
     #outputs
+    print("transition\n", transition)
+    print('emission\n', emission)
     return transition,emission
 
 def normalize(transition,emission):
@@ -68,11 +75,11 @@ def normalize(transition,emission):
     transition[0,0] = sol_tii
     transition[5,0] = sol_tii
     transition[0,1] = sol_tig
-    transition[5,1] = sol
+    transition[5,1] = sol_tig
     print('sol_tii',sol_tii,'sol_tig',sol_tig)
     #2
     transition[4,2] = transition[4,2]/(transition[4,5]+transition[4,2])
-    tranisiton[4,5] = 1-transition[4,2]
+    transition[4,5] = 1-transition[4,2]
     #print('sol_tgg',sol_tgg,'sol_tgi',sol_tgi)
     #3
 
